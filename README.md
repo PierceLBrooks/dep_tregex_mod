@@ -2,6 +2,8 @@
 
 This is a fork of [dep_tregex](https://github.com/yandex/dep_tregex), a Python 2 module that implements Stanford Tregex-inspired language for rule-based dependency tree manipulation. This fork extends the original functionality to allow for optional matchings using ``?``, as outlined in [Introduction to Tregex.ppt](http://nlp.stanford.edu/software/tregex/The_Wonderful_World_of_Tregex.ppt).
 
+Documentation: https://szymciolop.github.io/dep_tregex_mod/.
+
 Original documentation: https://yandex.github.io/dep_tregex/.
 
 
