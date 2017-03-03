@@ -76,7 +76,7 @@ class HasChild(TreePattern):
         for child in tree.children(node):
             if self.condition.match(tree, child, backrefs_map):
                 return True
-            return False
+        return False
 
 class HasSuccessor(TreePattern):
     def __init__(self, condition):
@@ -370,6 +370,14 @@ class Not(TreePattern):
         # to the outside world.
         copy = backrefs_map.copy()
         return not self.condition.match(tree, node, copy)
+
+class Optional(TreePattern):
+    def __init__(self, condition):
+        self.condition = condition
+
+    def match(self, tree, node, backrefs_map):
+        self.condition.match(tree, node, backrefs_map)
+        return True
 
 class AlwaysTrue(TreePattern):
     def match(self, tree, node, backrefs_map):
