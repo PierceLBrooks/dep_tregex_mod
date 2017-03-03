@@ -4,8 +4,6 @@ This is a fork of [dep_tregex](https://github.com/yandex/dep_tregex), a Python 2
 
 Documentation: https://szymciolop.github.io/dep_tregex_mod/.
 
-Original documentation: https://yandex.github.io/dep_tregex/.
-
 
 # usage notes
 
