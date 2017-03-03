@@ -7,7 +7,7 @@ Original documentation: https://yandex.github.io/dep_tregex/.
 
 # usage notes
 
-Trees are represented internally as a list of lists corresponding to [CoNNL-U format](http://universaldependencies.org/format.html).
+Trees are represented internally as lists corresponding to [CoNNL-U format](http://universaldependencies.org/format.html).
 
 ```python
 from dep_tregex import Tree
@@ -26,4 +26,20 @@ for node in range(1, len(tree) + 1):
         matchings.append(node)
         # backrefs_map contains matchings for variables x, y
         # in this case x == node
+```
+
+To output you tree to a file:
+
+```python
+import dep_tregex
+
+# for HTML:
+html_file = open('tree.html', 'w')
+dep_tregex.write_prologue_html(html_file)
+dep_tregex.write_tree_html(file, html_file)
+dep_tregex.write_epilogue_html(html_file)
+
+# for CoNLL-U:
+conll_file = open('tree.conll', 'w')
+dep_tregex.write_tree_conll(conll_file, tree)
 ```
