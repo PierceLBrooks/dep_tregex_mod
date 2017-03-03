@@ -38,6 +38,7 @@ Syntax
              : '==' ID
              : '(' `condition` ')'
              : 'not' `condition`
+             : '?' `condition`
              : `condition` 'and' `condition`
              : `condition` 'or' `condition`
     string_cond: "STRING"
@@ -309,7 +310,7 @@ Operator priority
 -----------------
 
 ============= =======
-1 (highest)   ``not``
+1 (highest)   ``not``, ``?`` (optional matching)
 2             ``and``
 3 (lowest)    ``or``
 ============= =======
