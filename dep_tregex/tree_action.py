@@ -15,13 +15,12 @@ class TreeAction:
 
     def get_backref(self, state, backref):
         """
-        Return state.backrefs[backref] or raise TreeActionError if no such key.
+        Return state.backrefs[backref] or None if no such key.
         """
         if backref in state.backrefs_map:
             return state.backrefs_map[backref]
 
-        msg = 'node %r was not matched in the pattern' % backref
-        self.error(msg)
+        return None
 
     def error(self, msg):
         """
@@ -143,6 +142,8 @@ class Move(TreeAction):
         anchor = self.get_backref(state, self.anchor)
 
         # Sanity checks.
+        if what is None or anchor is None:
+            return
         if what == 0:
             self.error("can't move root")
         if self.where == Tree.BEFORE and anchor == 0:
@@ -174,6 +175,8 @@ class Copy(TreeAction):
         anchor = self.get_backref(state, self.anchor)
 
         # Sanity checks.
+        if what is None or anchor is None:
+            return
         if what == 0:
             self.error("can't move root")
         if self.where == Tree.BEFORE and anchor == 0:
@@ -205,6 +208,11 @@ class Delete(TreeAction):
     def apply(self, state):
         # Locate nodes.
         deleted_node = self.get_backref(state, self.what)
+        
+        # Can't delete if doesn't exist
+        if deleted_node is None:
+            return
+
         deleted_nodes = _gather(state, deleted_node, self.sel_what)
 
         # Sanity checks.
@@ -229,6 +237,9 @@ class MutateAttr(TreeAction):
 
     def apply(self, state):
         node = self.get_backref(state, self.node)
+        # Can't mutate is doesn't exists
+        if node is None:
+            return
         if node == 0:
             self.error("can't set %r on root" % self.attr)
         # HACK: we use direct access to e.g. tree._forms.
@@ -257,6 +268,8 @@ class SetHead(TreeAction):
         head = self.get_backref(state, self.head)
 
         # Sanity checks.
+        if what is None or anchor is None:
+            return
         if node == 0:
             self.error("can't set root's head")
 
@@ -285,4 +298,7 @@ class GroupTogether(TreeAction):
     def apply(self, state):
         node1 = self.get_backref(state, self.node1)
         node2 = self.get_backref(state, self.node2)
+        # Can't group together if doesn't exist
+        if node1 is None or node2 is None:
+            return
         state.group_together(node1, node2)

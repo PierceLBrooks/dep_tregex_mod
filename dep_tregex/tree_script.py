@@ -113,7 +113,8 @@ class _TreeScriptParser:
         'LBRACE',
         'RBRACE',
         'SEMICOLON',
-        'BINARY_OP'
+        'BINARY_OP',
+        'OPTIONAL'
         ] + list(KEYWORDS.values())
 
     BINARY_OPS = {
@@ -178,6 +179,11 @@ class _TreeScriptParser:
 
         def t_EQUALS(t):
             r'=='
+            track(t)
+            return t
+
+        def t_OPTIONAL(t):
+            r'\?'
             track(t)
             return t
 
@@ -381,10 +387,13 @@ class _TreeScriptParser:
             """
             condition_not : condition_op
                           | NOT condition_op
+                          | OPTIONAL condition_op
             """
             s, pos = untrack(p)
             if len(p) == 2:
                 p[0] = s[1]
+            elif s[1] == u'?':
+                p[0] = Optional(s[2])
             else:
                 p[0] = Not(s[2])
             track(p, pos)
