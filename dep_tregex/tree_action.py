@@ -57,8 +57,8 @@ class TreeActionError(Exception):
             s = '(at line %i, col %i) %s' % (line, col, s)
         if self.text:
             lines = self.text.splitlines(False)
-            lines = [u'    ' + line for line in lines]
-            s = s + u'\n\n' + u'\n'.join(lines) + u'\n'
+            lines = ['    ' + line for line in lines]
+            s = s + '\n\n' + '\n'.join(lines) + '\n'
         return s
 
 ## ----------------------------------------------------------------------------
@@ -189,7 +189,7 @@ class Copy(TreeAction):
         new_num_words = len(state.tree)
 
         # Gather indices & move.
-        moved = range(new_num_words - num_new_words + 1, new_num_words + 1)
+        moved = list(range(new_num_words - num_new_words + 1, new_num_words + 1))
         _move(state, moved, anchor, self.sel_anchor, self.where)
 
 class Delete(TreeAction):

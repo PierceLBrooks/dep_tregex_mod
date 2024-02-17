@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 
 import cgi
 import sys
@@ -57,7 +57,7 @@ _COLOR_SMALL_H2 = '#900' # Bright highlight color for small text
 _COLOR_SMALL_HU = '#048' # User-highlighted small text.
 
 # SVG-wide stylesheet.
-_STYLE = u"""\
+_STYLE = """\
     <style type="text/css">
       /* Generic */
       * { stroke: none; fill: none; transition: %s; }
@@ -97,7 +97,7 @@ _STYLE = u"""\
     _COLOR_BIG_H2, _COLOR_BIG_H2, _COLOR_BIG_H2       # Arc hover
     )
 
-_PROLOGUE_HTML = u"""\
+_PROLOGUE_HTML = """\
 <!DOCTYPE html>
 <html>
   <head>
@@ -110,7 +110,7 @@ _PROLOGUE_HTML = u"""\
   <body>
 """ % _STYLE
 
-_EPILOGUE_HTML = u"""\
+_EPILOGUE_HTML = """\
   </body>
 </html>
 """
@@ -118,20 +118,20 @@ _EPILOGUE_HTML = u"""\
 # Styles that are applied to a tree node when its immediate head is
 # hovered over.
 _HEAD_HOVER_STYLES = [
-    u'.w%%i > text.big { fill: %s; }' % (_COLOR_BIG_H1,),
-    u'.w%%i > text.small { fill: %s; }' % (_COLOR_SMALL_H1,),
-    u'.a%%i > text.role { fill: %s; }' % (_COLOR_BIG_H1,),
-    u'.a%%i > path.arc { stroke: %s; }' % (_COLOR_BIG_H1,),
-    u'.a%%i > path.arrow { fill: %s; }' % (_COLOR_BIG_H1,)
+    '.w%%i > text.big { fill: %s; }' % (_COLOR_BIG_H1,),
+    '.w%%i > text.small { fill: %s; }' % (_COLOR_SMALL_H1,),
+    '.a%%i > text.role { fill: %s; }' % (_COLOR_BIG_H1,),
+    '.a%%i > path.arc { stroke: %s; }' % (_COLOR_BIG_H1,),
+    '.a%%i > path.arrow { fill: %s; }' % (_COLOR_BIG_H1,)
     ]
 
 # Styles that are applied to a tree node when its parent is hovered over,
 _PARENT_HOVER_STYLES = [
-    u'.w%%i > text.big { fill: %s; }' % (_COLOR_BIG_H0,),
-    u'.w%%i > text.small { fill: %s; }' % (_COLOR_SMALL_H0,),
-    u'.a%%i > text.role { fill: %s; }' % (_COLOR_BIG_H0,),
-    u'.a%%i > path.arc { stroke: %s; }' % (_COLOR_BIG_H0,),
-    u'.a%%i > path.arrow { fill: %s; }' % (_COLOR_BIG_H0,)
+    '.w%%i > text.big { fill: %s; }' % (_COLOR_BIG_H0,),
+    '.w%%i > text.small { fill: %s; }' % (_COLOR_SMALL_H0,),
+    '.a%%i > text.role { fill: %s; }' % (_COLOR_BIG_H0,),
+    '.a%%i > path.arc { stroke: %s; }' % (_COLOR_BIG_H0,),
+    '.a%%i > path.arrow { fill: %s; }' % (_COLOR_BIG_H0,)
     ]
 
 ## -----------------------------------------------------------------------------
@@ -147,7 +147,7 @@ def _label(tree, node, fields):
 
     # Lemma.
     if 'lemma' in fields:
-        label += u'\n' + tree.lemmas(node)
+        label += '\n' + tree.lemmas(node)
 
     # Postags.
     postags = []
@@ -156,11 +156,11 @@ def _label(tree, node, fields):
     if 'postag' in fields:
         postags.append(tree.postags(node))
     if postags:
-        label += u'\n' + u'/'.join(postags)
+        label += '\n' + '/'.join(postags)
 
     # Features.
     if 'feats' in fields:
-        label += u'\n' + u'|'.join(tree.feats(node))
+        label += '\n' + '|'.join(tree.feats(node))
 
     return cgi.escape(label)
 
@@ -169,7 +169,7 @@ def _label_height(text):
     Return label text height.
     First line is in big font, other lines are in small font.
     """
-    return _BIG_FONT + _SMALL_LINE * text.count(u'\n')
+    return _BIG_FONT + _SMALL_LINE * text.count('\n')
 
 def _label_width(text):
     """
@@ -178,7 +178,7 @@ def _label_width(text):
     First line is in big font, other lines are in small font.
     """
     width = 0
-    for lineno, line in enumerate(text.split(u'\n')):
+    for lineno, line in enumerate(text.split('\n')):
         size = [_BIG_FONT, _SMALL_FONT][lineno > 0] # Cool idiom, huh?
         width = max(width, size * len(line))
     return width
@@ -229,22 +229,22 @@ def _draw_label(file, text, x, y, css_class):
     height = _label_height(text)
 
     # Start a group.
-    file.write(u'      <g class="%s">\n' % css_class)
+    file.write('      <g class="%s">\n' % css_class)
 
     # Invisible hover-rectangle.
     # Makes it easier to hover over the label.
-    file.write(u'        <rect x="%i" y="%i" width="%i" height="%i" class="hid" />\n' %
+    file.write('        <rect x="%i" y="%i" width="%i" height="%i" class="hid" />\n' %
         (x - width / 2, y, width, height))
 
     # Lines of text.
     y += _BIG_FONT
-    for lineno, line in enumerate(text.split(u'\n')):
-        file.write(u'        <text x="%i" y="%i" class="%s">%s</text>\n' %
+    for lineno, line in enumerate(text.split('\n')):
+        file.write('        <text x="%i" y="%i" class="%s">%s</text>\n' %
             (x, y, 'big' if lineno == 0 else 'small', line))
         y += _SMALL_LINE
 
     # End a group.
-    file.write(u'      </g>\n')
+    file.write('      </g>\n')
 
 def _draw_root_arc(file, x, y, height_in_units, deprel, css_class):
     """
@@ -254,23 +254,23 @@ def _draw_root_arc(file, x, y, height_in_units, deprel, css_class):
     height = height_in_units * _ARC_HEIGHT_UNIT
 
     # Start.
-    file.write(u'      <g class="%s">\n' % css_class)
+    file.write('      <g class="%s">\n' % css_class)
 
     # Path.
     path = 'M %i %i L %i %i' % (x, y, x, y - height)
-    file.write(u'        <path d="%s" class="arc" />\n' % path)
-    file.write(u'        <path d="%s" class="arc hid" />\n' % path)
+    file.write('        <path d="%s" class="arc" />\n' % path)
+    file.write('        <path d="%s" class="arc hid" />\n' % path)
 
     # Arrow.
     _draw_arrow(file, x, y, math.pi / 2)
 
     # Role.
     deprel = cgi.escape(deprel)
-    file.write(u'        <text x="%i" y="%i" class="role">%s</text>\n' %
+    file.write('        <text x="%i" y="%i" class="role">%s</text>\n' %
         (x, y - height - 0.2 * _SMALL_FONT, deprel))
 
     # End.
-    file.write(u'      </g>\n')
+    file.write('      </g>\n')
 
 def _draw_arc(file, start_x, end_x, y, height_in_units, deprel, css_class):
     """
@@ -282,7 +282,7 @@ def _draw_arc(file, start_x, end_x, y, height_in_units, deprel, css_class):
     length = _arc_min_length(height_in_units)
 
     # Start.
-    file.write(u'      <g class="%s">\n' % css_class)
+    file.write('      <g class="%s">\n' % css_class)
 
     # Path.
     path = (
@@ -296,8 +296,8 @@ def _draw_arc(file, start_x, end_x, y, height_in_units, deprel, css_class):
         max(start_x, end_x) - length / 2, y - height,
         radius, radius, max(start_x, end_x), y
         )
-    file.write(u'        <path d="%s" class="arc" />\n' % path)
-    file.write(u'        <path d="%s" class="arc hid" />\n' % path)
+    file.write('        <path d="%s" class="arc" />\n' % path)
+    file.write('        <path d="%s" class="arc hid" />\n' % path)
 
     # Arrow.
     arrow_angle = _ANGLE if start_x > end_x else math.pi - _ANGLE
@@ -305,11 +305,11 @@ def _draw_arc(file, start_x, end_x, y, height_in_units, deprel, css_class):
 
     # Role.
     deprel = cgi.escape(deprel)
-    file.write(u'        <text x="%i" y="%i" class="role">%s</text>\n' %
+    file.write('        <text x="%i" y="%i" class="role">%s</text>\n' %
         ((start_x + end_x) / 2, y - height - 0.2 * _SMALL_FONT, deprel))
 
     # End.
-    file.write(u'      </g>\n')
+    file.write('      </g>\n')
 
 def _draw_arrow(file, tip_x, tip_y, angle):
     """
@@ -336,7 +336,7 @@ def _draw_arrow(file, tip_x, tip_y, angle):
         tip_x + _ARROW_SIZE * math.cos(angle + _ARROW_SPREAD),
         tip_y - _ARROW_SIZE * math.sin(angle + _ARROW_SPREAD),
         )
-    file.write(u'        <path d="%s" class="arrow"/>\n' % (path,))
+    file.write('        <path d="%s" class="arrow"/>\n' % (path,))
 
 ## -----------------------------------------------------------------------------
 #                                   Main
@@ -391,8 +391,8 @@ def write_tree_html(file, tree, fields=[], highlight_nodes=[], static=False):
 
     # Get and measure labels.
     labels = [_label(tree, node, fields) for node in range(1, N + 1)]
-    label_widths = map(_label_width, labels)
-    label_heights = map(_label_height, labels)
+    label_widths = list(map(_label_width, labels))
+    label_heights = list(map(_label_height, labels))
 
     # Determine words' centers.
     centers = []
@@ -427,12 +427,12 @@ def write_tree_html(file, tree, fields=[], highlight_nodes=[], static=False):
     _UID += 1
 
     # Start drawing.
-    file.write(u'    <svg width="%i" height="%i" class="%s">\n' %
+    file.write('    <svg width="%i" height="%i" class="%s">\n' %
         (svg_width, svg_height, uid))
 
     # Write hover styles.
     if not static:
-        file.write(u'      <style type="text/css">\n')
+        file.write('      <style type="text/css">\n')
         for node in range(1, N + 1):
             # Start with head.
             styles = _HEAD_HOVER_STYLES
@@ -441,12 +441,12 @@ def write_tree_html(file, tree, fields=[], highlight_nodes=[], static=False):
             while head != 0:
                 # Highlight a node its arc when head's label is hovered over.
                 for style in styles:
-                    file.write(u'        .%s .w%i:hover ~ %s\n' %
+                    file.write('        .%s .w%i:hover ~ %s\n' %
                         (uid, head, style % node))
                 # Go to head's head.
                 head = tree.heads(head)
                 styles = _PARENT_HOVER_STYLES
-        file.write(u'      </style>\n')
+        file.write('      </style>\n')
 
     # Write text and arcs in topsorted order.
     queue = tree.children(0)[:]
@@ -479,7 +479,7 @@ def write_tree_html(file, tree, fields=[], highlight_nodes=[], static=False):
         i += 1
 
     # Done.
-    file.write(u'    </svg>\n')
+    file.write('    </svg>\n')
 
 def write_epilogue_html(file):
     file.write(_EPILOGUE_HTML)

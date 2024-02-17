@@ -145,7 +145,7 @@ class _TreeScriptParser:
             # Compute position.
             start, end = t.lexer.lexmatch.span(0)
             line = t.lexer.lineno
-            last_newline = t.lexer.lexdata.rfind(u'\n', 0, t.lexpos)
+            last_newline = t.lexer.lexdata.rfind('\n', 0, t.lexpos)
             col = (t.lexpos - last_newline)
 
             # Embed position into value.
@@ -190,7 +190,7 @@ class _TreeScriptParser:
         def t_BINARY_OP(t):
             track(t)
             return t
-        binary_ops = sorted(cls.BINARY_OPS.keys(), key=len, reverse=True)
+        binary_ops = sorted(list(cls.BINARY_OPS.keys()), key=len, reverse=True)
         t_BINARY_OP.__doc__ = '|'.join(map(re.escape, binary_ops))
 
         def t_COMMAND_SEP(t):
@@ -231,7 +231,7 @@ class _TreeScriptParser:
 
         def t_error(t):
             line = t.lexer.lineno
-            last_newline = t.lexer.lexdata.rfind(u'\n', 0, t.lexpos)
+            last_newline = t.lexer.lexdata.rfind('\n', 0, t.lexpos)
             col = (t.lexpos - last_newline)
             c = t.value[0:1]
             msg = '(at line %i, col %i) invalid character %r' % (line, col, c)
@@ -249,7 +249,7 @@ class _TreeScriptParser:
                 s.append(p[i][0])
                 pos.append(p[i][1])
 
-            known_pos = filter(bool, pos)
+            known_pos = list(filter(bool, pos))
             if not known_pos:
                 p0_pos = None
             else:
@@ -392,7 +392,7 @@ class _TreeScriptParser:
             s, pos = untrack(p)
             if len(p) == 2:
                 p[0] = s[1]
-            elif s[1] == u'?':
+            elif s[1] == '?':
                 p[0] = Optional(s[2])
             else:
                 p[0] = Not(s[2])
@@ -499,7 +499,7 @@ class _TreeScriptParser:
             """
             s, pos = untrack(p)
             if s[2] == 'feats':
-                newval = s[4].split(u'|')
+                newval = s[4].split('|')
             else:
                 newval = s[4]
             newval_fn = lambda x, newval=newval: newval

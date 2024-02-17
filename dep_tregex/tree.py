@@ -206,7 +206,7 @@ class Tree:
         exc = ValueError('invalid reordering: %r' % new_indices)
         if len(set(new_indices)) != N:
             raise exc
-        if sorted(new_indices) != range(N):
+        if sorted(new_indices) != list(range(N)):
             raise exc
 
         # Reorder tree.

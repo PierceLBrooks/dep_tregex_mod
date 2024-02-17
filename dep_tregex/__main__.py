@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 
 import argparse
 import cgi
@@ -21,7 +21,7 @@ from dep_tregex.tree_to_html import *
 def words():
     for tree in read_trees_conll(sys.stdin):
         forms = [tree.forms(i) for i in range(1, len(tree) + 1)]
-        print(u' '.join(forms))
+        print(' '.join(forms))
 
 # - Count trees - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -272,12 +272,12 @@ def _gdb_tree(scripts, scripts_text, tree, fields, file):
     """
 
     # Original tree.
-    file.write(u'    <h1>Original tree</h1>\n')
+    file.write('    <h1>Original tree</h1>\n')
     write_tree_html(file, tree, fields)
 
     # Whole script.
-    file.write(u'    <h1>Whole script</h1>\n')
-    file.write(u'<pre>%s</pre>\n' % cgi.escape(scripts_text))
+    file.write('    <h1>Whole script</h1>\n')
+    file.write('<pre>%s</pre>\n' % cgi.escape(scripts_text))
 
     # Construct a tree state.
     backrefs_map = {}
@@ -308,11 +308,11 @@ def _gdb_tree(scripts, scripts_text, tree, fields, file):
 
             # Report the match.
             start, end, line, col = script.pos
-            file.write(u'    <h1>Matched rule #%i</h1>' % (script_no + 1))
-            file.write(u'    <div class="pos">(at line %i, col %i)</div>\n' %
+            file.write('    <h1>Matched rule #%i</h1>' % (script_no + 1))
+            file.write('    <div class="pos">(at line %i, col %i)</div>\n' %
                 (line, col))
-            file.write(u'<pre>%s</pre>\n' % cgi.escape(script.text))
-            file.write(u'    <h2>Match</h2>\n')
+            file.write('<pre>%s</pre>\n' % cgi.escape(script.text))
+            file.write('    <h2>Match</h2>\n')
             write_tree_html(file, tree, fields, [node])
 
             # Apply all actions and print tree after each step.
@@ -329,27 +329,27 @@ def _gdb_tree(scripts, scripts_text, tree, fields, file):
                 # If not succeeded, print the exception.
                 if exc:
                     file.write(
-                        u'    <h2 class="err">Error action #%i</h2>\n' %
+                        '    <h2 class="err">Error action #%i</h2>\n' %
                         (action_no + 1))
                     file.write(
-                        u'    <div class="pos">(at line %i, col %i)</div>\n' %
+                        '    <div class="pos">(at line %i, col %i)</div>\n' %
                         (line, col))
-                    file.write(u'<pre>%s</pre>\n' % cgi.escape(action.text))
+                    file.write('<pre>%s</pre>\n' % cgi.escape(action.text))
                     file.write('<br>')
                     file.write(
-                        u'<pre class="err">%s</pre>\n' %
+                        '<pre class="err">%s</pre>\n' %
                         cgi.escape(exc.msg))
                     break # Action loop.
 
                 # Otherwise, print the tree.
                 else:
                     file.write(
-                        u'    <h2>After action #%i</h2>\n' %
+                        '    <h2>After action #%i</h2>\n' %
                         (action_no + 1))
                     file.write(
-                        u'    <div class="pos">(at line %i, col %i)</div>\n' %
+                        '    <div class="pos">(at line %i, col %i)</div>\n' %
                         (line, col))
-                    file.write(u'<pre>%s</pre>\n' % cgi.escape(action.text))
+                    file.write('<pre>%s</pre>\n' % cgi.escape(action.text))
                     write_tree_html(file, tree, fields)
 
             if exc:
@@ -360,7 +360,7 @@ def _gdb_tree(scripts, scripts_text, tree, fields, file):
 
     # Final tree.
     if not exc:
-        file.write(u'    <h1>Final tree</h1>\n')
+        file.write('    <h1>Final tree</h1>\n')
         write_tree_html(file, tree, fields)
 
 def _gdb(scripts_filename, fields, file):

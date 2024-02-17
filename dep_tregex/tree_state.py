@@ -38,7 +38,7 @@ class TreeState:
 
         # Reorder grouping.
         grouped_with = collections.defaultdict(set)
-        for node, grouped_nodes in self._grouped_with.items():
+        for node, grouped_nodes in list(self._grouped_with.items()):
             if node != 0:
                 node = new_indices[node - 1] + 1
             for grouped_node in grouped_nodes:
@@ -73,7 +73,7 @@ class TreeState:
 
         # Erase backrefs.
         backrefs_to_erase = []
-        for backref, node in self.backrefs_map.items():
+        for backref, node in list(self.backrefs_map.items()):
             if node in deleted:
                 backrefs_to_erase.append(backref)
         for backref in backrefs_to_erase:

@@ -7,7 +7,7 @@ def _valid(text, empty_allowed=False):
     """
 
     # Whitespace is not allowed inside strings.
-    for c in u'\t\n ':
+    for c in '\t\n ':
         if c in text:
             return False
 
@@ -16,7 +16,7 @@ def _valid(text, empty_allowed=False):
         return False
 
     # Can't encode underscores: underscore means 'empty' in CoNLL format.
-    if empty_allowed and text == u'_':
+    if empty_allowed and text == '_':
         return False
 
     return True
@@ -41,7 +41,11 @@ def read_trees_conll(filename_or_file, errors='strict'):
 
     for line_no, line in enumerate(file):
         try:
-            line = line.decode('utf-8', errors).strip(u'\n')
+            line = line.strip('\n')
+            if len(line) == 0:
+                continue
+            if line[0] == '#':
+                continue
 
             # On empty line, yield the tree (if the tree is not empty).
             if not line:
@@ -56,11 +60,11 @@ def read_trees_conll(filename_or_file, errors='strict'):
                 continue
 
             # Split the line and check the format.
-            parts = line.split(u'\t')
+            parts = line.split('\t')
             if len(parts) != 10:
-                msg = 'expected 10 tab-separated fields, got %i'
-                raise ValueError(msg % len(parts))
-            if parts[0] != unicode(node):
+                msg = 'expected 10 tab-separated fields, got %i @ %s'
+                raise ValueError(msg % (len(parts), line))
+            if parts[0] != str(node):
                 msg = 'field 0: expected %r, got %r'
                 raise ValueError(msg % (str(node), parts[0]))
             for i, part in enumerate(parts):
@@ -75,13 +79,13 @@ def read_trees_conll(filename_or_file, errors='strict'):
             lemma = parts[2]
             cpostag = parts[3]
             postag = parts[4]
-            feat = parts[5].split(u'|')
+            feat = parts[5].split('|')
             head = int(parts[6])
             deprel = parts[7]
 
-            if parts[2] == u'_':
-                lemma = u''
-            if parts[5] == u'_':
+            if parts[2] == '_':
+                lemma = ''
+            if parts[5] == '_':
                 feat = []
 
             # Append the fields to the current tree.
@@ -95,7 +99,7 @@ def read_trees_conll(filename_or_file, errors='strict'):
 
         # Catch all exceptions occurred while parsing, and report filename
         # and line number.
-        except ValueError, e:
+        except ValueError as e:
             msg = 'error while reading CoNLL file %r, line %i: %s'
             raise ValueError(msg % (filename_or_file, line_no, e))
 
@@ -122,24 +126,24 @@ def write_tree_conll(file, tree):
         deprel = tree.deprels(node)
 
         if not _valid(form, empty_allowed=False):
-            raise ValueError(u'invalid FORM: %r' % form)
+            raise ValueError('invalid FORM: %r' % form)
         if not _valid(lemma, empty_allowed=True):
-            raise ValueError(u'invalid LEMMA: %r' % lemma)
+            raise ValueError('invalid LEMMA: %r' % lemma)
         if not _valid(cpostag, empty_allowed=False):
-            raise ValueError(u'invalid CPOSTAG: %r' % cpostag)
+            raise ValueError('invalid CPOSTAG: %r' % cpostag)
         if not _valid(postag, empty_allowed=False):
-            raise ValueError(u'invalid POSTAG: %r' % postag)
+            raise ValueError('invalid POSTAG: %r' % postag)
         if any(not _valid(feat, empty_allowed=False) for feat in feats):
-            raise ValueError(u'invalid FEATS: %r' % feats)
+            raise ValueError('invalid FEATS: %r' % feats)
         if not _valid(deprel, empty_allowed=False):
-            raise ValueError(u'invalid DEPREL: %r' % deprel)
+            raise ValueError('invalid DEPREL: %r' % deprel)
 
-        id = unicode(node)
-        lemma = lemma or u'_'
-        head = unicode(head)
-        feats = u'|'.join(feats) or u'_'
+        id = str(node)
+        lemma = lemma or '_'
+        head = str(head)
+        feats = '|'.join(feats) or '_'
 
         parts = [id, form, lemma, cpostag, postag, feats, head, deprel]
-        file.write(u'\t'.join(parts) + u'\t_\t_\n')
+        file.write('\t'.join(parts) + '\t_\t_\n')
 
-    file.write(u'\n')
+    file.write('\n')

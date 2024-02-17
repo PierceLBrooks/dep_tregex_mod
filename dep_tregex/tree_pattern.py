@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 
 import re
 
@@ -326,7 +326,7 @@ class FeatsMatch(TreePattern):
         if node == 0:
             return False
 
-        attr = u'|'.join(tree.feats(node))
+        attr = '|'.join(tree.feats(node))
         return self.pred_fn(attr)
 
 ## ----------------------------------------------------------------------------
